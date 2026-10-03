@@ -5,6 +5,8 @@ import {
   MAX_HEADLINE_CHARS,
   MIN_HEADLINES,
   MODES,
+  CLICKBAIT_QUESTION,
+  STAT_QUESTION,
   rankContenders,
   type Mode,
   type RawScores,
@@ -25,69 +27,12 @@ async function scoreHeadline(headline: string, mode: Mode, audience: string) {
   };
 
   const { answers, inputTokens } = await askJev(state, {
-    curiosity: {
-      type: 'score',
-      instructions: 'How much does this headline make the audience want to find out more?',
-      criteria: [
-        'gives no reason to read on',
-        'mildly interesting',
-        'raises a question the reader would like answered',
-        'opens a gap the reader wants closed',
-        'the reader has to know the answer',
-      ],
-    },
-    clarity: {
-      type: 'score',
-      instructions: 'How quickly and easily can the audience understand what this is about?',
-      criteria: [
-        'confusing, the topic is unclear',
-        'takes a second read to understand',
-        'understandable with some effort',
-        'clear at a glance',
-        'instantly clear, nothing to decode',
-      ],
-    },
-    specificity: {
-      type: 'score',
-      instructions: 'How concrete is the headline: numbers, names, outcomes, timeframes, details?',
-      criteria: [
-        'completely vague and generic',
-        'mostly generic',
-        'one concrete detail',
-        'several concrete details',
-        'precise and vivid, could only be about this one thing',
-      ],
-    },
-    emotion: {
-      type: 'score',
-      instructions: 'How strongly does the headline make the audience feel something (hope, fear, delight, outrage, recognition)?',
-      criteria: [
-        'flat, no feeling at all',
-        'faint interest',
-        'some feeling',
-        'a clear emotional hook',
-        'a strong gut reaction',
-      ],
-    },
-    credibility: {
-      type: 'score',
-      instructions: 'How believable and trustworthy does this headline seem to the audience?',
-      criteria: [
-        'sounds like a scam or obvious exaggeration',
-        'feels overhyped',
-        'plausible',
-        'believable and grounded',
-        'sounds authoritative and trustworthy',
-      ],
-    },
-    clickbait: {
-      type: 'boolean',
-      instructions: 'Is this headline manipulative clickbait?',
-      criteria: {
-        true: 'relies on hype, shouting, fake shock, or deliberately hiding the point to trick the reader into clicking',
-        false: 'states or hints at its real topic honestly, even if it is bold, punchy, or promises a benefit',
-      },
-    },
+    curiosity: { type: 'score', ...STAT_QUESTION.curiosity },
+    clarity: { type: 'score', ...STAT_QUESTION.clarity },
+    specificity: { type: 'score', ...STAT_QUESTION.specificity },
+    emotion: { type: 'score', ...STAT_QUESTION.emotion },
+    credibility: { type: 'score', ...STAT_QUESTION.credibility },
+    clickbait: { type: 'boolean', ...CLICKBAIT_QUESTION },
     wouldClick: {
       type: 'boolean',
       instructions: 'Would a typical member of this audience click or open this when they see it in the described format?',

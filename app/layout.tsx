@@ -12,7 +12,7 @@ const display = Barlow_Condensed({
 
 const body = Barlow({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600'],
   display: 'swap',
   variable: '--font-body-face',
 });

@@ -50,13 +50,75 @@ export const STAT_ABBR: Record<Stat, string> = {
   credibility: 'CRD',
 };
 
+/** The question Jev answers for each stat, on a five step scale. */
+export const STAT_QUESTION: Record<Stat, { instructions: string; criteria: string[] }> = {
+  curiosity: {
+    instructions: 'How much does this headline make the audience want to find out more?',
+    criteria: [
+      'gives no reason to read on',
+      'mildly interesting',
+      'raises a question the reader would like answered',
+      'opens a gap the reader wants closed',
+      'the reader has to know the answer',
+    ],
+  },
+  clarity: {
+    instructions: 'How quickly and easily can the audience understand what this is about?',
+    criteria: [
+      'confusing, the topic is unclear',
+      'takes a second read to understand',
+      'understandable with some effort',
+      'clear at a glance',
+      'instantly clear, nothing to decode',
+    ],
+  },
+  specificity: {
+    instructions: 'How concrete is the headline: numbers, names, outcomes, timeframes, details?',
+    criteria: [
+      'completely vague and generic',
+      'mostly generic',
+      'one concrete detail',
+      'several concrete details',
+      'precise and vivid, could only be about this one thing',
+    ],
+  },
+  emotion: {
+    instructions: 'How strongly does the headline make the audience feel something (hope, fear, delight, outrage, recognition)?',
+    criteria: [
+      'flat, no feeling at all',
+      'faint interest',
+      'some feeling',
+      'a clear emotional hook',
+      'a strong gut reaction',
+    ],
+  },
+  credibility: {
+    instructions: 'How believable and trustworthy does this headline seem to the audience?',
+    criteria: [
+      'sounds like a scam or obvious exaggeration',
+      'feels overhyped',
+      'plausible',
+      'believable and grounded',
+      'sounds authoritative and trustworthy',
+    ],
+  },
+};
+
+export const CLICKBAIT_QUESTION = {
+  instructions: 'Is this headline manipulative clickbait?',
+  criteria: {
+    true: 'relies on hype, shouting, fake shock, or deliberately hiding the point to trick the reader into clicking',
+    false: 'states or hints at its real topic honestly, even if it is bold, punchy, or promises a benefit',
+  },
+};
+
 export const LEVELS = 5;
 export const MIN_HEADLINES = 2;
 export const MAX_HEADLINES = 8;
 export const MAX_HEADLINE_CHARS = 300;
 export const MAX_AUDIENCE_CHARS = 200;
 
-const WEIGHTS: Record<Stat, number> = {
+export const WEIGHTS: Record<Stat, number> = {
   curiosity: 0.22,
   clarity: 0.2,
   specificity: 0.18,
