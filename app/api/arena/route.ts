@@ -143,8 +143,8 @@ export async function POST(req: Request) {
     return fail(`Keep the audience to one line, ${MAX_AUDIENCE_CHARS} characters at most.`, 413);
   }
 
-  const gate = check(req, 'analyze');
-  if (!gate.ok) return tooMany(gate.retryAfter);
+  const gate = await check(req, 'analyze');
+  if (!gate.ok) return tooMany(gate);
 
   try {
     const scored = await Promise.all(headlines.map((h) => scoreHeadline(h, mode, audience)));
