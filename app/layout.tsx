@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
+import { JSON_LD, jsonLdScript, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_TITLE, SITE_URL } from './site';
 
 const display = Barlow_Condensed({
   subsets: ['latin'],
@@ -17,8 +18,29 @@ const body = Barlow({
 });
 
 export const metadata: Metadata = {
-  title: 'Headline Arena',
-  description: 'Put 2 to 8 headlines in the ring. Each one is scored on five stats and ranked by power rating.',
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  applicationName: SITE_NAME,
+  authors: [{ name: 'Sahil Chalke', url: 'https://sahilchalke.com' }],
+  creator: 'Sahil Chalke',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: '/',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@chalke1015',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -28,7 +50,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body>{children}</body>
+      <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(JSON_LD) }} />
+        {children}
+      </body>
     </html>
   );
 }

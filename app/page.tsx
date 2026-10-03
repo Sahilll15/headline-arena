@@ -114,6 +114,7 @@ export default function Home() {
         <section className="pt-6 sm:pt-12">
           <p className="font-display text-sm font-bold uppercase tracking-[0.25em] text-teal">Tonight&apos;s card</p>
           <h1 className="mt-2 wordmark text-[3.6rem] sm:text-8xl lg:text-[8.5rem]">
+            <span className="sr-only">Headline Arena headline tester. </span>
             Who wins
             <br />
             the click?
