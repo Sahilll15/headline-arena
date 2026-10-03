@@ -20,6 +20,18 @@ Calls go through Vercel AI Gateway first and fall back to TypeSafe's own API whe
 
 A longer recording is in [docs/demo.mp4](docs/demo.mp4).
 
+## Architecture
+
+![Headline Arena architecture: the browser posts headlines to one route handler, which counts the request in Upstash Redis and scores each headline with TypeSafe Jev through Vercel AI Gateway, falling back to the direct TypeSafe API](docs/architecture.svg)
+
+1. The browser posts the headlines, format and audience to `POST /api/arena`.
+2. The route validates the bout, then takes a rate limit slot in Upstash Redis and answers 429 when the window is used up.
+3. It scores every headline in its own Jev call through Vercel AI Gateway (`typesafe-ai/jev`), all in parallel.
+4. Jev answers five score and three yes/no questions per headline. If the Gateway fails, the same questions go straight to the TypeSafe API (dashed path).
+5. The route ranks the contenders in `app/lib/arena.ts` and the browser draws the champion card, podium and leaderboard.
+
+**Why it is built this way.** The TypeSafe and Gateway keys stay on the server. Jev only returns numbers, and the ranking and fight summaries are computed in code from them. The limit is counted in Redis before any paid call, so it holds across Vercel instances.
+
 ## Stack
 
 Next.js 16 (App Router), React 19, Tailwind CSS v4, TypeScript and the Vercel AI SDK, deployed on Vercel. Jev calls go through Vercel AI Gateway and fall back to the TypeSafe API. Unit tests use the Node test runner.
